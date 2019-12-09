@@ -72,6 +72,65 @@ namespace LexicalAnalyzer
 
                     SetTable(Value, tokens);
                 }
+                else
+                {
+                    Simple = false;
+                    GetBrTokens(Value);
+                }
+            }
+
+            private void GetBrTokens(string line)
+            {
+                char c;
+                string tmp = "";
+                line = line.Replace(" ", "");
+                line = line.Replace("\r\n", "");
+                int i = 0;
+
+                //Get keyword
+                for (; i < line.Length; i++)
+                {
+                    c = line[i];
+
+                    if (c == '(')
+                    {
+                        if (!string.IsNullOrEmpty(tmp) && BracesOperators.Contains(tmp))
+                        {
+                            tokens.Add(tmp);
+                            tmp = "";
+                            break;
+                        }
+                        else
+                        {
+                            throw new Exception("Неправильно!");
+                        }
+                    }
+
+                    tmp += c;
+                }
+
+                line = line.Substring(i + 1);
+
+                List<string> lexs = new List<string>();
+
+                //Get comdition
+                for (int j = 0; j < line.Length; j++)
+                {
+                    c = line[j];
+                    tmp += c;
+
+                    if (c == ')')
+                    {
+                        SetTable(tmp, lexs);
+                        break;
+                    }
+                }
+
+                foreach(var s in lexs)
+                {
+                    tokens.Add(s);
+                }
+
             }
 
             public List<Unit> Units { get; set; }
@@ -130,7 +189,7 @@ namespace LexicalAnalyzer
 
                         if (c == ' ' || c == '\r' || c == '\n')
                         {
-                            if(start && c == ' ')
+                            if (start && c == ' ')
                             {
                                 tmp += c;
                             }
@@ -207,7 +266,7 @@ namespace LexicalAnalyzer
                 throw new Exception("Лишние скобки");
             }
 
-            if(!string.IsNullOrEmpty(tmp))
+            if (!string.IsNullOrEmpty(tmp))
             {
                 throw new Exception("tmp не пуст, что-то не так");
             }
@@ -222,6 +281,7 @@ namespace LexicalAnalyzer
         static void SetTable(string line, List<string> lexems)
         {
             string tmp = "";
+            string logicTmp = "";
 
             foreach (var c in line)
             {
@@ -232,6 +292,13 @@ namespace LexicalAnalyzer
                         lexems.Add(tmp);
                         tmp = "";
                     }
+
+                    if (!string.IsNullOrEmpty(logicTmp))
+                    {
+                        lexems.Add(logicTmp);
+                        logicTmp = "";
+                    }
+
                     continue;
                 }
 
@@ -242,9 +309,37 @@ namespace LexicalAnalyzer
                         lexems.Add(tmp);
                         tmp = "";
                     }
+
+                    logicTmp = "";
+                }
+
+                if (Logic.Contains(c))
+                {
+                    logicTmp += c;
+                    continue;
+                }
+
+                if (LogicalOperations.Contains(logicTmp) || logicTmp == "=")
+                {
+                    if (!string.IsNullOrEmpty(tmp))
+                    {
+                        lexems.Add(tmp);
+                        lexems.Add(logicTmp);
+                        logicTmp = "";
+                        tmp = "";
+                    }
+                    else
+                    {
+                        throw new Exception("Косяк в логике");
+                    }
                 }
 
                 tmp += c;
+            }
+
+            if (!string.IsNullOrEmpty(tmp))
+            {
+                throw new Exception("Что-то не так в условии, либо не хватает ;");
             }
         }
 
@@ -256,7 +351,7 @@ namespace LexicalAnalyzer
         {
             ' ',
             '(',
-
+            ')',
             ';',
             '\r',
             '\n'
@@ -268,6 +363,28 @@ namespace LexicalAnalyzer
             '-',
             '/',
             '*'
+        };
+
+
+
+        static List<string> LogicalOperations = new List<string>()
+        {
+            "<",
+            ">",
+            "<=",
+            ">=",
+            "!=",
+            "==",
+        };
+
+        static List<char> Logic = new List<char>()
+        {
+            '<',
+            '>',
+            '<',
+            '>',
+            '!',
+            '=',
         };
 
 
