@@ -14,11 +14,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Учеба\\2 курс\\1 семестр\\Игнатьев\\Mine\\LexicalAnalyzer\\LexicalAnalyzer\\LexicalAnalyzer.csproj",
+      "projectUniqueName": "D:\\Учеба\\2 курс\\1 семестр\\Игнатьев\\Mine\\Git\\LexicalAnalyzer\\LexicalAnalyzer\\LexicalAnalyzer\\LexicalAnalyzer.csproj",
       "projectName": "LexicalAnalyzer",
-      "projectPath": "D:\\Учеба\\2 курс\\1 семестр\\Игнатьев\\Mine\\LexicalAnalyzer\\LexicalAnalyzer\\LexicalAnalyzer.csproj",
+      "projectPath": "D:\\Учеба\\2 курс\\1 семестр\\Игнатьев\\Mine\\Git\\LexicalAnalyzer\\LexicalAnalyzer\\LexicalAnalyzer\\LexicalAnalyzer.csproj",
       "packagesPath": "C:\\Users\\vladi\\.nuget\\packages\\",
-      "outputPath": "D:\\Учеба\\2 курс\\1 семестр\\Игнатьев\\Mine\\LexicalAnalyzer\\LexicalAnalyzer\\obj\\",
+      "outputPath": "D:\\Учеба\\2 курс\\1 семестр\\Игнатьев\\Mine\\Git\\LexicalAnalyzer\\LexicalAnalyzer\\LexicalAnalyzer\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"

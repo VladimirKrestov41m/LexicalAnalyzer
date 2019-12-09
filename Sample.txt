@@ -1,5 +1,6 @@
-if
+int i = 10;
+int b = 3;
+   if()
 {
-  
+int y = 44;
 }
-   

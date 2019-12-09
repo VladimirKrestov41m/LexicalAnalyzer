@@ -8,9 +8,9 @@ namespace LexicalAnalyzer
     {
         static void Main(string[] args)
         {
-            string path = @"D:\Учеба\2 курс\1 семестр\Игнатьев\Mine\Sample.txt";
+            string path = @"D:\Учеба\2 курс\1 семестр\Игнатьев\Mine\Git\LexicalAnalyzer\Sample.txt";
             string result = ReadFile(path);
-            SetUnits(result);
+            SetUnits(result, _units);
             //SetTable(result);
 
 
@@ -20,9 +20,9 @@ namespace LexicalAnalyzer
             //}
             //Console.WriteLine(result);
 
-            foreach (var t in units)
+            foreach (var t in _units)
             {
-                Console.WriteLine(t);
+                Console.WriteLine(t.Value);
                 Console.WriteLine("---");
             }
 
@@ -34,17 +34,54 @@ namespace LexicalAnalyzer
 
         class Unit
         {
-            public Unit()
-            {
+            List<Unit> _units2 = new List<Unit>();
+            List<string> tokens = new List<string>();
 
+            public Unit(string line)
+            {
+                Value = line;
+                char c;
+                for (int i = 0; i < line.Length; i++)
+                {
+                    c = line[i];
+                    if (c == '{')
+                    {
+                        int l = line.Length;
+
+                        if (line[l - 1] == '}')
+                        {
+                            line = line.Substring(i + 1, l - 1 - i - 1);
+                            SetUnits(line, _units2);
+                        }
+                        else
+                        {
+                            throw new Exception("Со скобками беда");
+                        }
+                    }
+                }
+                Units = _units2;
+
+                if(_units2.Count == 0)
+                {
+                    Simple = true;
+
+                    if(Value[Value.Length - 1] != ';')
+                    {
+                        throw new Exception("Где ; в конце строки???");
+                    }
+
+                    SetTable(Value, tokens);
+                }
             }
 
-            List<Unit> Units { get; set; }
+            public List<Unit> Units { get; set; }
 
-            string Value { get; set; }
+            public string Value { get; set; }
+
+            public bool Simple { get; set; }
         }
 
-        static List<string> units = new List<string>();
+        static List<Unit> _units = new List<Unit>();
 
         static private string GetFirstLex(ref string line)
         {
@@ -54,7 +91,7 @@ namespace LexicalAnalyzer
             {
                 if (separators.Contains(c))
                 {
-                    if(string.IsNullOrEmpty(tmp))
+                    if (string.IsNullOrEmpty(tmp))
                     {
                         line = line.Substring(1);
                         continue;
@@ -71,12 +108,10 @@ namespace LexicalAnalyzer
         static List<string> BracesOperators = new List<string>()
         {
             "for",
-            "if",
-            "readln",
-            "writeln"
+            "if"
         };
 
-        static private void SetUnits(string line)
+        static private void SetUnits(string line, List<Unit> units)
         {
             int bracCount = 0;
 
@@ -84,7 +119,7 @@ namespace LexicalAnalyzer
             {
                 string tmp = "";
                 string firstLex = GetFirstLex(ref line);
-                
+
                 bool start = false;
 
                 if (BracesOperators.Contains(firstLex))
@@ -111,14 +146,14 @@ namespace LexicalAnalyzer
 
                         tmp += c;
 
-                        if(bracCount < 0)
+                        if (bracCount < 0)
                         {
                             throw new Exception("Лишние фигурные скобки");
                         }
 
                         if (bracCount == 0 && start)
                         {
-                            units.Add(tmp);
+                            units.Add(new Unit(tmp));
                             line = line.Substring(i + 1);
                             tmp = "";
                             break;
@@ -139,7 +174,7 @@ namespace LexicalAnalyzer
                 {
                     char c = line[i];
 
-                    if(c == '{' || c == '}')
+                    if (c == '{' || c == '}')
                     {
                         throw new Exception("Скобки вообще тут неуместны");
                     }
@@ -149,7 +184,8 @@ namespace LexicalAnalyzer
                     {
                         if (!string.IsNullOrEmpty(tmp))
                         {
-                            units.Add(tmp);
+                            tmp += c;
+                            units.Add(new Unit(tmp));
                             tmp = "";
                         }
 
@@ -161,7 +197,7 @@ namespace LexicalAnalyzer
                 }
             }
 
-            if(bracCount != 0)
+            if (bracCount != 0)
             {
                 throw new Exception("Лишние скобки");
             }
@@ -173,7 +209,7 @@ namespace LexicalAnalyzer
             return sr.ReadToEnd();
         }
 
-        static void SetTable(string line)
+        static void SetTable(string line, List<string> lexems)
         {
             string tmp = "";
 
@@ -183,7 +219,7 @@ namespace LexicalAnalyzer
                 {
                     if (!string.IsNullOrEmpty(tmp))
                     {
-                        lexems.Add(new Token(tmp));
+                        lexems.Add(tmp);
                         tmp = "";
                     }
                     continue;
@@ -193,7 +229,7 @@ namespace LexicalAnalyzer
                 {
                     if (!string.IsNullOrEmpty(tmp))
                     {
-                        lexems.Add(new Token(tmp));
+                        lexems.Add(tmp);
                         tmp = "";
                     }
                 }
@@ -203,7 +239,7 @@ namespace LexicalAnalyzer
         }
 
 
-        static List<Token> lexems = new List<Token>();
+        static List<Token> _lexems = new List<Token>();
 
 
         static List<char> separators = new List<char>()
@@ -211,7 +247,7 @@ namespace LexicalAnalyzer
             ' ',
             '(',
             
-            //';',
+            ';',
             '\r',
             '\n'
         };

@@ -9,3 +9,14 @@ D:\Учеба\2 курс\1 семестр\Игнатьев\Mine\LexicalAnalyzer\
 D:\Учеба\2 курс\1 семестр\Игнатьев\Mine\LexicalAnalyzer\LexicalAnalyzer\obj\Debug\netcoreapp3.1\LexicalAnalyzer.AssemblyInfo.cs
 D:\Учеба\2 курс\1 семестр\Игнатьев\Mine\LexicalAnalyzer\LexicalAnalyzer\obj\Debug\netcoreapp3.1\LexicalAnalyzer.dll
 D:\Учеба\2 курс\1 семестр\Игнатьев\Mine\LexicalAnalyzer\LexicalAnalyzer\obj\Debug\netcoreapp3.1\LexicalAnalyzer.pdb
+D:\Учеба\2 курс\1 семестр\Игнатьев\Mine\Git\LexicalAnalyzer\LexicalAnalyzer\LexicalAnalyzer\bin\Debug\netcoreapp3.1\LexicalAnalyzer.exe
+D:\Учеба\2 курс\1 семестр\Игнатьев\Mine\Git\LexicalAnalyzer\LexicalAnalyzer\LexicalAnalyzer\bin\Debug\netcoreapp3.1\LexicalAnalyzer.deps.json
+D:\Учеба\2 курс\1 семестр\Игнатьев\Mine\Git\LexicalAnalyzer\LexicalAnalyzer\LexicalAnalyzer\bin\Debug\netcoreapp3.1\LexicalAnalyzer.runtimeconfig.json
+D:\Учеба\2 курс\1 семестр\Игнатьев\Mine\Git\LexicalAnalyzer\LexicalAnalyzer\LexicalAnalyzer\bin\Debug\netcoreapp3.1\LexicalAnalyzer.runtimeconfig.dev.json
+D:\Учеба\2 курс\1 семестр\Игнатьев\Mine\Git\LexicalAnalyzer\LexicalAnalyzer\LexicalAnalyzer\bin\Debug\netcoreapp3.1\LexicalAnalyzer.dll
+D:\Учеба\2 курс\1 семестр\Игнатьев\Mine\Git\LexicalAnalyzer\LexicalAnalyzer\LexicalAnalyzer\bin\Debug\netcoreapp3.1\LexicalAnalyzer.pdb
+D:\Учеба\2 курс\1 семестр\Игнатьев\Mine\Git\LexicalAnalyzer\LexicalAnalyzer\LexicalAnalyzer\obj\Debug\netcoreapp3.1\LexicalAnalyzer.csprojAssemblyReference.cache
+D:\Учеба\2 курс\1 семестр\Игнатьев\Mine\Git\LexicalAnalyzer\LexicalAnalyzer\LexicalAnalyzer\obj\Debug\netcoreapp3.1\LexicalAnalyzer.AssemblyInfoInputs.cache
+D:\Учеба\2 курс\1 семестр\Игнатьев\Mine\Git\LexicalAnalyzer\LexicalAnalyzer\LexicalAnalyzer\obj\Debug\netcoreapp3.1\LexicalAnalyzer.AssemblyInfo.cs
+D:\Учеба\2 курс\1 семестр\Игнатьев\Mine\Git\LexicalAnalyzer\LexicalAnalyzer\LexicalAnalyzer\obj\Debug\netcoreapp3.1\LexicalAnalyzer.dll
+D:\Учеба\2 курс\1 семестр\Игнатьев\Mine\Git\LexicalAnalyzer\LexicalAnalyzer\LexicalAnalyzer\obj\Debug\netcoreapp3.1\LexicalAnalyzer.pdb
