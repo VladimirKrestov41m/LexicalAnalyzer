@@ -1,5 +1,20 @@
-   if(1 <= 4)
+int a = 0;
+int b = 10;
+while(a < b)
 {
-int y = 44;
-int u = 11;
+	/*Some comment*/
+	if(1 <= 4)
+	{
+		int t = 5 + 9;
+	}
+
+	a = a + 1;
+}
+
+
+if(a < 10)
+{
+/*
+sdif
+*/ int t = 10;
 }

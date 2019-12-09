@@ -35,11 +35,13 @@ namespace LexicalAnalyzer
         class Unit
         {
             List<Unit> _units2 = new List<Unit>();
-            List<string> tokens = new List<string>();
+            List<Token> tokens = new List<Token>();
 
             public Unit(string line)
             {
+                line = line.Replace("\r", "");
                 Value = line;
+
                 char c;
                 for (int i = 0; i < line.Length; i++)
                 {
@@ -55,7 +57,7 @@ namespace LexicalAnalyzer
                         }
                         else
                         {
-                            throw new Exception("Со скобками беда");
+                            //throw new Exception("Со скобками беда");
                         }
                     }
                 }
@@ -96,7 +98,7 @@ namespace LexicalAnalyzer
                     {
                         if (!string.IsNullOrEmpty(tmp) && BracesOperators.Contains(tmp))
                         {
-                            tokens.Add(tmp);
+                            tokens.Add(new Token(tmp));
                             tmp = "";
                             break;
                         }
@@ -111,7 +113,7 @@ namespace LexicalAnalyzer
 
                 line = line.Substring(i + 1);
 
-                List<string> lexs = new List<string>();
+                List<Token> lexs = new List<Token>();
 
                 //Get comdition
                 for (int j = 0; j < line.Length; j++)
@@ -126,7 +128,7 @@ namespace LexicalAnalyzer
                     }
                 }
 
-                foreach(var s in lexs)
+                foreach (var s in lexs)
                 {
                     tokens.Add(s);
                 }
@@ -138,6 +140,50 @@ namespace LexicalAnalyzer
             public string Value { get; set; }
 
             public bool Simple { get; set; }
+
+            public List<Token> Tokens => tokens;
+        }
+
+        class Token
+        {
+            public Token(string value)
+            {
+                Value = value;
+                Type = GetLexType(value);
+            }
+
+            public string Value { get; set; }
+            public LexType Type { get; set; }
+
+            private LexType GetLexType(string lex)
+            {
+                if (keyWords.Contains(lex))
+                {
+                    return LexType.KeyWord;
+                }
+
+                if (lex == "=")
+                {
+                    return LexType.AssignmentSymbol;
+                }
+
+                if (operations.Contains(lex[0]))
+                {
+                    return LexType.AssignmentSymbol;
+                }
+
+                if (LogicalOperations.Contains(lex))
+                {
+                    return LexType.LogicOperator;
+                }
+
+                if (Int32.TryParse(lex, out _))
+                {
+                    return LexType.Constant;
+                }
+
+                return LexType.Identifier;
+            }
         }
 
         static List<Unit> _units = new List<Unit>();
@@ -166,7 +212,7 @@ namespace LexicalAnalyzer
 
         static List<string> BracesOperators = new List<string>()
         {
-            "for",
+            "while",
             "if"
         };
 
@@ -187,7 +233,16 @@ namespace LexicalAnalyzer
                     {
                         char c = line[i];
 
-                        if (c == ' ' || c == '\r' || c == '\n')
+                        if (c == '/')
+                        {
+                            Comment(ref i, line);
+                            i++;
+                            line = line.Substring(i + 1);
+                            i = -1;
+                            continue;
+                        }
+
+                        if (c == ' ' || c == '\t' || c == '\n')
                         {
                             if (start && c == ' ')
                             {
@@ -238,7 +293,16 @@ namespace LexicalAnalyzer
                 {
                     char c = line[i];
 
-                    if (c == '{' || c == '}')
+                    if (c == '/')
+                    {
+                        Comment(ref i, line);
+                        i++;
+                        line = line.Substring(i + 1);
+                        i = -1;
+                        continue;
+                    }
+
+                    if (bracCount == 0 && (c == '{' || c == '}'))
                     {
                         throw new Exception("Скобки вообще тут неуместны");
                     }
@@ -272,13 +336,30 @@ namespace LexicalAnalyzer
             }
         }
 
+        static void Comment(ref int i, string line)
+        {
+            if (line[i + 1] == '*')
+            {
+                for (; i < line.Length; i++)
+                {
+                    if (line[i] == '*' && line[i + 1] == '/')
+                    {
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                throw new Exception("Лишний слэш");
+            }
+        }
         static string ReadFile(string path)
         {
             using StreamReader sr = new StreamReader(path);
             return sr.ReadToEnd();
         }
 
-        static void SetTable(string line, List<string> lexems)
+        static void SetTable(string line, List<Token> lexems)
         {
             string tmp = "";
             string logicTmp = "";
@@ -289,13 +370,13 @@ namespace LexicalAnalyzer
                 {
                     if (!string.IsNullOrEmpty(tmp))
                     {
-                        lexems.Add(tmp);
+                        lexems.Add(new Token(tmp));
                         tmp = "";
                     }
 
                     if (!string.IsNullOrEmpty(logicTmp))
                     {
-                        lexems.Add(logicTmp);
+                        lexems.Add(new Token(logicTmp));
                         logicTmp = "";
                     }
 
@@ -306,7 +387,7 @@ namespace LexicalAnalyzer
                 {
                     if (!string.IsNullOrEmpty(tmp))
                     {
-                        lexems.Add(tmp);
+                        lexems.Add(new Token(tmp));
                         tmp = "";
                     }
 
@@ -323,8 +404,8 @@ namespace LexicalAnalyzer
                 {
                     if (!string.IsNullOrEmpty(tmp))
                     {
-                        lexems.Add(tmp);
-                        lexems.Add(logicTmp);
+                        lexems.Add(new Token(tmp));
+                        lexems.Add(new Token(logicTmp));
                         logicTmp = "";
                         tmp = "";
                     }
@@ -391,7 +472,7 @@ namespace LexicalAnalyzer
         static List<string> keyWords = new List<string>()
         {
             "int",
-            "for",
+            "while",
             "if"
         };
     }
@@ -402,56 +483,9 @@ namespace LexicalAnalyzer
         Identifier,
         Operation,
         AssignmentSymbol,
-        Constant
+        Constant,
+        LogicOperator
     }
 
-    class Token
-    {
-        static List<string> keyWords = new List<string>()
-        {
-            "int"
-        };
 
-        static List<string> operations = new List<string>()
-        {
-            "+",
-            "-",
-            "/",
-            "*"
-        };
-
-        public Token(string value)
-        {
-            Value = value;
-            Type = GetType(value);
-        }
-
-        public string Value { get; set; }
-        public LexType Type { get; set; }
-
-        private LexType GetType(string lex)
-        {
-            if (keyWords.Contains(lex))
-            {
-                return LexType.KeyWord;
-            }
-
-            if (lex == "=")
-            {
-                return LexType.AssignmentSymbol;
-            }
-
-            if (operations.Contains(lex))
-            {
-                return LexType.AssignmentSymbol;
-            }
-
-            if (Int32.TryParse(lex, out _))
-            {
-                return LexType.Constant;
-            }
-
-            return LexType.Identifier;
-        }
-    }
 }
