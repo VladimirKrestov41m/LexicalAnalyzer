@@ -61,11 +61,11 @@ namespace LexicalAnalyzer
                 }
                 Units = _units2;
 
-                if(_units2.Count == 0)
+                if (_units2.Count == 0)
                 {
                     Simple = true;
 
-                    if(Value[Value.Length - 1] != ';')
+                    if (Value[Value.Length - 1] != ';')
                     {
                         throw new Exception("Где ; в конце строки???");
                     }
@@ -114,10 +114,10 @@ namespace LexicalAnalyzer
         static private void SetUnits(string line, List<Unit> units)
         {
             int bracCount = 0;
+            string tmp = "";
 
-            for (; line.Length > 0;)
+            for (int y = 0; line.Length > 0 || y < line.Length; y++)
             {
-                string tmp = "";
                 string firstLex = GetFirstLex(ref line);
 
                 bool start = false;
@@ -130,6 +130,11 @@ namespace LexicalAnalyzer
 
                         if (c == ' ' || c == '\r' || c == '\n')
                         {
+                            if(start && c == ' ')
+                            {
+                                tmp += c;
+                            }
+
                             continue;
                         }
 
@@ -201,6 +206,11 @@ namespace LexicalAnalyzer
             {
                 throw new Exception("Лишние скобки");
             }
+
+            if(!string.IsNullOrEmpty(tmp))
+            {
+                throw new Exception("tmp не пуст, что-то не так");
+            }
         }
 
         static string ReadFile(string path)
@@ -246,7 +256,7 @@ namespace LexicalAnalyzer
         {
             ' ',
             '(',
-            
+
             ';',
             '\r',
             '\n'
